@@ -24,7 +24,7 @@
             <h1 class="font-medium py-3 text-4xl">Employee List</h1>
             <div class="p-3  border-t-[1px] border-solid border-slate-300">
                 <!-- action_sort -->
-                <form action=" ${pageContext.request.contextPath}/employee/search" method="post"
+                <form th:action="@{/employees}" method="get"
                       class="flex justify-end  mx-auto gap-2 rounded-l-sm ">
                     <div class="relative flex items-center w-96">
                         <div class=" w-12 rounded-l-sm  bg-[#eeeeee] p-3  w-12 flex items-center justify-center inset-y-0 start-0 flex items-center  pointer-events-none">
@@ -34,9 +34,12 @@
                                       stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"></path>
                             </svg>
                         </div>
-                        <input name="searchContent" type="search" id="default-search"
-                               class="block w-full w-4/5 p-2 border-[1px] border-solid border-slate-300 ps-10 text-sm text-gray-900 rounded-r-lg bg-white  "
-                               placeholder="User Search" required/>
+                        <input
+                                name="q"
+                                th:value="${param.q}"
+                                type="search" id="default-search"
+                                class="block w-full w-4/5 p-2 border-[1px] border-solid border-slate-300 ps-10 text-sm text-gray-900 rounded-r-lg bg-white  "
+                                placeholder="User Search" required/>
                     </div>
                     <!-- sort -->
                     <div class="relative flex items-center ml-3">
@@ -46,11 +49,13 @@
                             <span>Filter By</span>
                         </div>
                         <div class="dropdown border-[1px] border-solid border-[#ccc]">
-
-                            <select class="p-2 w-24 " name="searchField" id="searchField">
-                                <option selected value="firstName">name</option>
-                                <option value="phone">Phone number</option>
-                                <option value="email">Email</option>
+                            <select
+                                    th:value="${param.field}"
+                                    th:name="field"
+                                    class="p-2 w-24 " name="searchField" id="searchField">
+                                <option th:selected="${param.field == 'firstName'}" value="firstName">Name</option>
+                                <option th:selected="${param.field == 'phone'}" value="phone">Phone Number</option>
+                                <option th:selected="${param.field == 'email'}" value="email">Email</option>
                             </select>
                         </div>
                     </div>
@@ -63,10 +68,16 @@
                 </form>
 
                 <div class="overflow-x-auto mt-10">
+                    <p class="alert alert-success" th:if="${#strings.equals(param.success, 'update')}">
+                        Update Employee success
+                    </p>
+                    <p class="alert alert-success" th:if="${#strings.equals(param.success, 'add')}">
+                        Add Employee success
+                    </p>
                     <!-- table -->
                     <div class="mb-2">
                         Total employee: <i class="font-bold">
-                        <span th:text="${employees.size()}"></span>
+                        <span th:text="${employees.getTotalElements()}"></span>
                     </i>
                     </div>
                     <table class="table border-[1px] border-solid border-[#eeeeee] ">
@@ -103,14 +114,14 @@
                                 <span th:text="${emp.getDepartmentName()}"></span>
                             </td>
                             <td class="flex items-center justify-start [1px] border-solid border-[#eeeeee]">
-                                <a href="${pageContext.request.contextPath}/employee/detail?id=<%=employee.getId()%>"
+                                <a th:href="@{/employees/{employeeId}(employeeId=${emp.getEmployeeId()})}"
                                    class="p-2 cursor-pointer gap-1 rounded-l-sm text-[#347ab6]  px-4 flex items-center
                                             justify-center">
                                     <i class="fa-solid fa-eye"></i>
                                     <span>View</span>
                                 </a>
                                 |
-                                <a href="${pageContext.request.contextPath}/employee/delete?id=<%=employee.getId()%>"
+                                <a th:href="@{/employees/delete/{employeeId}(employeeId=${emp.getEmployeeId()})}"
                                    class="p-2 cursor-pointer gap-1  rounded-l-sm text-red-700  px-4 flex items-center
                                         justify-center">
                                     <i class="fa-solid fa-trash"></i>
@@ -121,6 +132,39 @@
                         </tbody>
                     </table>
                 </div>
+
+                <!--              pagination-->
+                <ul class="flex items-center border-[1px] mt-10 border-solid border-[#eeeeee] w-fit">
+                    <button
+                            th:if="${employees.hasPrevious()}"
+                            class="w-20 btn rounded-none m-0 p-0 border-[1px] border-solid border-[#ccc]">
+                        <a
+                                th:href="@{/employees(page=${employees.getNumber() - 1})}"
+                        >
+                            Previous
+                        </a>
+                    </button>
+                    <li
+                            th:classappend="${page == employees.getNumber() + 1} ? 'bg-[#347ab6] text-white' : ''"
+                            th:each="page : ${#numbers.sequence(1, employees.totalPages)}"
+                            class="p-3 border-[1px] border-solid border-[#ccc] m-0 text-[#347ab6]">
+                        <a
+                                th:text="${page}"
+                                th:href="@{/employees(page=${page - 1})}"
+                                class="page-link">
+
+                        </a>
+                    </li>
+                    <button
+                            th:if="${employees.hasNext()}"
+                            class="btn rounded-none m-0 p-[-5px] w-20 text-[#347ab6]">
+                        <a
+                                th:href="@{/employees(page=${employees.getNumber() + 1})}"
+                        >
+                            Next
+                        </a>
+                    </button>
+                </ul>
             </div>
         </div>
     </div>
