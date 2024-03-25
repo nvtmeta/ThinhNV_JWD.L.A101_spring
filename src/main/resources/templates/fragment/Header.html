@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Header</title>
+</head>
+<body>
+<header class="bg-[#F8F8F8] flex justify-between fixed top-0 w-full z-10 h-16">
+    <!-- logo -->
+    <div class="flex items-center ml-2 justify-center text-gray-600 gap-2">
+        <i class="fa-solid fa-users text-2xl"></i>
+        <a th:href="@{/employees}" class="text-2xl font-medium text-center ">Employee</a>
+    </div>
+    <!-- logout -->
+    <div class="flex items-center mr-4 justify-center text-purple-600 gap-6">
+                <span>
+                    Welcome Long
+                </span>
+        <div>
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <a href="" class="">Logout</a>
+        </div>
+    </div>
+</header>
+
+</body>
+</html>
