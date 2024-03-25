@@ -62,7 +62,65 @@
                     </button>
                 </form>
 
-
+                <div class="overflow-x-auto mt-10">
+                    <!-- table -->
+                    <div class="mb-2">
+                        Total employee: <i class="font-bold">
+                        <span th:text="${employees.size()}"></span>
+                    </i>
+                    </div>
+                    <table class="table border-[1px] border-solid border-[#eeeeee] ">
+                        <!-- head -->
+                        <thead>
+                        <tr class="text-black bg-[#f2f2f2] ">
+                            <th class="border-[1px] border-solid border-[#eeeeee]">ID</th>
+                            <th class="border-[1px] border-solid border-[#eeeeee]">Name</th>
+                            <th class="border-[1px] border-solid border-[#eeeeee]">Date of birth</th>
+                            <th class="border-[1px] border-solid border-[#eeeeee]">Address</th>
+                            <th class="border-[1px] border-solid border-[#eeeeee]">Phone number</th>
+                            <th class="border-[1px] border-solid border-[#eeeeee]">Department</th>
+                            <th class="border-[1px] border-solid border-[#eeeeee]">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody class="">
+                        <tr th:each="emp: ${employees}" class="border-[1px] border-solid border-[#eeeeee]">
+                            <td class="border-[1px] border-solid border-[#eeeeee]">
+                                <span th:text="${emp.getEmployeeId()}"></span>
+                            </td>
+                            <td class="border-[1px] border-solid border-[#eeeeee]">
+                                <span th:text="${emp.getFirstName()}"></span>
+                            </td>
+                            <td class="border-[1px] border-solid border-[#eeeeee]">
+                                <span th:text="${emp.getDateOfBirth()}"></span>
+                            </td>
+                            <td class="border-[1px] border-solid border-[#eeeeee]">
+                                <span th:text="${emp.getAddress()}"></span>
+                            </td>
+                            <td class="border-[1px] border-solid border-[#eeeeee]">
+                                <span th:text="${emp.getPhone()}"></span>
+                            </td>
+                            <td class="border-[1px] border-solid border-[#eeeeee]">
+                                <span th:text="${emp.getDepartmentName()}"></span>
+                            </td>
+                            <td class="flex items-center justify-start [1px] border-solid border-[#eeeeee]">
+                                <a href="${pageContext.request.contextPath}/employee/detail?id=<%=employee.getId()%>"
+                                   class="p-2 cursor-pointer gap-1 rounded-l-sm text-[#347ab6]  px-4 flex items-center
+                                            justify-center">
+                                    <i class="fa-solid fa-eye"></i>
+                                    <span>View</span>
+                                </a>
+                                |
+                                <a href="${pageContext.request.contextPath}/employee/delete?id=<%=employee.getId()%>"
+                                   class="p-2 cursor-pointer gap-1  rounded-l-sm text-red-700  px-4 flex items-center
+                                        justify-center">
+                                    <i class="fa-solid fa-trash"></i>
+                                    <span>Delete</span>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
