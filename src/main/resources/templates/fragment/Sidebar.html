@@ -5,7 +5,7 @@
     <title>Sidebar</title>
 </head>
 <body>
-<sidebar class="bg-[#F8F8F8]  w-1/5 ">
+<sidebar class="bg-[#F8F8F8]  w-1/5 h-screen">
     <div class="border-b-2 p-3 text-blue-500">
         <i class="fa-solid fa-gauge"></i>
         <a href="#" class="">Dashboard</a>
@@ -17,12 +17,15 @@
             <a href="#" class="text-blue-500">Employee manager</a>
         </div>
         <div class="collapse-content">
-            <div class="border-b-2 p-3 items-center gap-2 flex text-blue-500">
+            <div
+            th:classappend=" ${employees != null} ? ' text-blue-500' : 'text-gray-400'"
+            class="border-b-2 p-3 items-center gap-2 flex text-blue-500">
                 <i class="fa-solid fa-list"></i>
-                <a th:href="@{/employees}" class="">Employee list</a>
+            <a th:href="@{/employees}" class="">Employee list</a>
             </div>
 
-            <div class="border-b-2 p-3 items-center gap-2 flex text-blue-500">
+        <div class="border-b-2 p-3 items-center gap-2 flex text-blue-500 "
+        >
                 <i class="fa-solid fa-plus"></i>
                 <a th:href="@{/employees/create}"
                    class="">Add Employee</a>

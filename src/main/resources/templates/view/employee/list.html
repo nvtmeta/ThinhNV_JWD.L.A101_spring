@@ -53,9 +53,9 @@
                                     th:value="${param.field}"
                                     th:name="field"
                                     class="p-2 w-24 " name="searchField" id="searchField">
-                                <option th:selected="${param.field == 'firstName'}" value="firstName">Name</option>
-                                <option th:selected="${param.field == 'phone'}" value="phone">Phone Number</option>
-                                <option th:selected="${param.field == 'email'}" value="email">Email</option>
+                                <option th:selected="${#strings.equalsIgnoreCase(param.field, 'firstName')}" value="firstName">Name</option>
+                                <option th:selected="${#strings.equalsIgnoreCase(param.field, 'phone')}" value="phone">Phone Number</option>
+                                <option th:selected="${#strings.equalsIgnoreCase(param.field, 'email')}" value="email">Email</option>
                             </select>
                         </div>
                     </div>

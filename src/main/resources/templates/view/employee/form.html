@@ -115,12 +115,15 @@
                                 required name="password" size="100" type="password" placeholder="Password"
                                class="input mt-2 input-bordered w-[60rem] "/>
                         <!--         TODO: error message-->
-<!--                        return "view/employee/form?error=password";-->
-                        <span
-                        th:ìf="${#strings.equalsIgnoreCase(param.error, 'password')}"
-                        class=" text-red-500"
-                        th:text="${param.error}"
+                        <p class="text-red-500 mt-2"
+                           th:if="${error}"
                         >
+                            The password must
+                            have at least 6
+                            characters, including
+                            uppercase, lowercase
+                            and number.
+                        </p>
                         </span>
                     </div>
                     <div class="flex flex-col">

@@ -36,19 +36,27 @@ public class EmployeeController {
                            @PageableDefault(page = 0, size = 3) Pageable pageable
     ) {
 //        TODO:when search, need pagination fix
-        Page<Employee> employees;
+
+
         Specification<Employee> spec = Specification.where(null);
 
-        Specification<Employee> specKeyword = (root, query1, criteriaBuilder) ->
-                criteriaBuilder.like(root.get(searchField), "%" + query + "%");
-        spec = spec.and(specKeyword);
+        if (searchField != null) {
+            if (searchField.equalsIgnoreCase("email")) {
+                spec = spec.and((root, criteriaQuery, criteriaBuilder) ->
+                        criteriaBuilder.like(root.join("account").get("email"), "%" + query + "%"));
+            } else {
+                spec = spec.and((root, criteriaQuery, criteriaBuilder) ->
+                        criteriaBuilder.like(root.get(searchField), "%" + query + "%"));
+            }
+        }
+
+        Page<Employee> employees;
 
         if(query != null) {
             employees = employeeService.getAllEmployees(spec, pageable);
         } else {
             employees = employeeService.getAllEmployees(pageable);
         }
-
 
         model.addAttribute("employees", employees);
         return "view/employee/list";
@@ -69,26 +77,30 @@ public class EmployeeController {
 
     @GetMapping("/employees/create")
     public String createEmployee(Model model) {
-        model.addAttribute("employeeFormData", new EmployeeAddDto());
+        EmployeeAddDto employeeFormData = new EmployeeAddDto();
+
+        model.addAttribute("employeeFormData", employeeFormData);
         return "view/employee/form";
     }
 
     @PostMapping("/employees/create")
     public String createEmployee(@ModelAttribute("employeeFormData") @Valid EmployeeAddDto employeeAddDto,
-                                 BindingResult bindingResult) {
+                                 BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
             return "redirect:/employees/create?error=password";
         }
 
         boolean isValid = ValidatePassword.isValid(employeeAddDto.getAccount().getPassword());
+        System.out.println("isValid: " + isValid);
         if (!isValid) {
 //            bindingResult.rejectValue("password", "error.password", "Password must have at least 6 characters, including uppercase, lowercase,
 //            and a number");
-            return "redirect:/employees/create?error=password";
+            model.addAttribute("error", "Password must have at least 6 " +
+                    "characters, including uppercase, lowercase,and a number");
+            return "view/employee/form";
         }
 
-        System.out.println("employeeAddDto: " + employeeAddDto.getAccount().getAccount());
         Employee employee = new Employee();
         BeanUtils.copyProperties(employeeAddDto, employee);
 
