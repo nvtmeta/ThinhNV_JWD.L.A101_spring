@@ -15,7 +15,6 @@
 <body>
 <div class="flex flex-col ">
     <th:block th:insert="fragment/Header"></th:block>
-    <!--TODO:toast message-->
     <div class="bg-[#ccc] flex top-16 relative">
         <th:block th:insert="fragment/Sidebar"></th:block>
 
@@ -139,7 +138,11 @@
                             th:if="${employees.hasPrevious()}"
                             class="w-20 btn rounded-none m-0 p-0 border-[1px] border-solid border-[#ccc]">
                         <a
-                                th:href="@{/employees(page=${employees.getNumber() - 1})}"
+                                th:href="@{/employees(
+                                page=${employees.getNumber() - 1},
+                                q=${param.q != null ? param.q : ''},
+                                field=${param.field}
+                                )}"
                         >
                             Previous
                         </a>
@@ -150,7 +153,11 @@
                             class="p-3 border-[1px] border-solid border-[#ccc] m-0 text-[#347ab6]">
                         <a
                                 th:text="${page}"
-                                th:href="@{/employees(page=${page - 1})}"
+                                th:href="@{/employees(
+                                page=${page - 1},
+                                q=${param.q != null ? param.q : ''},
+                                field=${param.field}
+                                )}"
                                 class="page-link">
 
                         </a>
@@ -159,7 +166,11 @@
                             th:if="${employees.hasNext()}"
                             class="btn rounded-none m-0 p-[-5px] w-20 text-[#347ab6]">
                         <a
-                                th:href="@{/employees(page=${employees.getNumber() + 1})}"
+                                th:href="@{/employees(
+                                page=${employees.getNumber() + 1},
+                                q=${param.q != null ? param.q : ''},
+                                field=${param.field}
+                                )}"
                         >
                             Next
                         </a>

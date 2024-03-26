@@ -40,7 +40,7 @@ public class EmployeeController {
 
         Specification<Employee> spec = Specification.where(null);
 
-        if (searchField != null) {
+        if (query != null && !query.isEmpty()) {
             if (searchField.equalsIgnoreCase("email")) {
                 spec = spec.and((root, criteriaQuery, criteriaBuilder) ->
                         criteriaBuilder.like(root.join("account").get("email"), "%" + query + "%"));
@@ -53,6 +53,7 @@ public class EmployeeController {
         Page<Employee> employees;
 
         if(query != null) {
+            System.out.println("query: " + query);
             employees = employeeService.getAllEmployees(spec, pageable);
         } else {
             employees = employeeService.getAllEmployees(pageable);
