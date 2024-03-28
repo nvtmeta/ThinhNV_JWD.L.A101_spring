@@ -31,33 +31,27 @@ public class EmployeeController {
 
     @GetMapping("/employees")
     public String employee(Model model,
-                           @RequestParam(name = "q", required = false) String query,
-                           @RequestParam(name = "field", required = false) String searchField,
+                           @RequestParam(name = "q") Optional<String> query,
+                           @RequestParam(name = "field") Optional<String> searchField,
                            @PageableDefault(page = 0, size = 3) Pageable pageable
     ) {
-//        TODO:when search, need pagination fix
-
 
         Specification<Employee> spec = Specification.where(null);
 
-        if (query != null && !query.isEmpty()) {
-            if (searchField.equalsIgnoreCase("email")) {
+        if (query.isPresent() && searchField.isPresent()) {
+            System.out.println("query: " + query + " searchField: " + searchField);
+            if (searchField.get().equals("email")) {
                 spec = spec.and((root, criteriaQuery, criteriaBuilder) ->
-                        criteriaBuilder.like(root.join("account").get("email"), "%" + query + "%"));
-            } else {
+                        criteriaBuilder.like(root.join("account").get("email"), "%" + query.get() + "%"));
+            } else if (!searchField.get().isEmpty()) {
                 spec = spec.and((root, criteriaQuery, criteriaBuilder) ->
-                        criteriaBuilder.like(root.get(searchField), "%" + query + "%"));
+                        criteriaBuilder.like(root.get(searchField.get()), "%" + query.get() + "%"));
             }
         }
 
         Page<Employee> employees;
 
-        if(query != null) {
-            System.out.println("query: " + query);
-            employees = employeeService.getAllEmployees(spec, pageable);
-        } else {
-            employees = employeeService.getAllEmployees(pageable);
-        }
+        employees = employeeService.getAllEmployees(spec, pageable);
 
         model.addAttribute("employees", employees);
         return "view/employee/list";

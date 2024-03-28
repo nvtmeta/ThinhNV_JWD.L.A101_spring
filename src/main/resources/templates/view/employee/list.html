@@ -141,7 +141,7 @@
                                 th:href="@{/employees(
                                 page=${employees.getNumber() - 1},
                                 q=${param.q != null ? param.q : ''},
-                                field=${param.field}
+                                field=${param.field != null ? param.field : ''}
                                 )}"
                         >
                             Previous
@@ -156,7 +156,7 @@
                                 th:href="@{/employees(
                                 page=${page - 1},
                                 q=${param.q != null ? param.q : ''},
-                                field=${param.field}
+                                field=${param.field != null ? param.field : ''}
                                 )}"
                                 class="page-link">
 
@@ -169,7 +169,7 @@
                                 th:href="@{/employees(
                                 page=${employees.getNumber() + 1},
                                 q=${param.q != null ? param.q : ''},
-                                field=${param.field}
+                                field=${param.field != null ? param.field : ''}
                                 )}"
                         >
                             Next

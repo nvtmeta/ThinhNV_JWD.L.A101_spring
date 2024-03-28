@@ -16,9 +16,11 @@
                 <span>
                     Welcome Long
                 </span>
-        <div>
+        <div class="flex items-center gap-2 cursor-pointer">
             <i class="fa-solid fa-right-from-bracket"></i>
-            <a href="" class="">Logout</a>
+            <form th:action="@{/logout}" method="post">
+                <input type="submit" value="Logout"/>
+            </form>
         </div>
     </div>
 </header>
